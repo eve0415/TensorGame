@@ -1,0 +1,7 @@
+node_modules
+LICENSE
+README.md
+.git*
+.github
+.vscode
+.eslint*
