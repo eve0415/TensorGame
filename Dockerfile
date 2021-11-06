@@ -1,5 +1,9 @@
-FROM node:16-alpine3.14 AS builder-base
-RUN apk add python3 make g++
+FROM node:16-bullseye-slim AS builder-base
+RUN apt-get update &&\
+    apt-get install --no-install-recommends -y \
+    python3 \
+    make \
+    g++
 
 
 FROM builder-base AS builder
@@ -17,7 +21,7 @@ RUN yarn install --frozen-lockfile --production --network-timeout 100000 && yarn
 COPY --from=builder /app/dist ./
 
 
-FROM node:16-alpine3.14 AS runner
+FROM builder-base AS runner
 WORKDIR /app
 COPY --from=production /app ./
 CMD ["node", "index.js"]
